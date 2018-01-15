@@ -76,7 +76,8 @@ int specialDigitalRead(int pin)
 
 int main(int argc, char ** argv)
 {
-        for(x = 206, x < 210, x++) {
+	int x;
+        for(x = 206; x < 210; x++) {
                 printf("Pin %d value = &d\n", x, specialDigitalRead(x));
         }
         return 0;
