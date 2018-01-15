@@ -58,15 +58,19 @@ int specialDigitalRead(int pin)
         {
                 case 207:
                         state = bitRead(devreg, 1);
-                        break;
+                        return state;
+			break;
                 case 208:
                         state = bitRead(devreg, 2);
+			return state;
                         break;
                 case 209:
                         state = bitRead(devreg, 3);
+			return state;
                         break;
                 case 206:
                         state = bitRead(devreg, 0);
+			return state;
                         break;
                 default:
                         break;
