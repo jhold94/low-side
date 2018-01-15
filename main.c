@@ -51,6 +51,7 @@ uint8_t fpeek8(int twifd, uint16_t addr)
 
 int specialDigitalRead(int pin)
 {
+	static int twifd = fpga_init(NULL, 0);
         int devreg = fpeek8(twifd, 0xE);
         int state;
         switch(pin)
