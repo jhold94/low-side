@@ -3,7 +3,6 @@
 *  gcc -fno-tree-cselim -Wall -O0 -mcpu=arm9 -o analog analog.c
 */
 
-#include <iostream>
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -11,7 +10,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "sources/gpiolib.h"
 
 volatile unsigned int *mxlradcregs;
 unsigned int i, x;
