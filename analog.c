@@ -33,7 +33,7 @@ void analogPinMode(int pin)
 		gpio_unexport(232);
 	} else
 	{
-		std::cout << "Pin is not supported for current loop" << std::endl;
+		printf("Pin is not supported for current loop");
 	}
 }
 
@@ -63,6 +63,7 @@ int analogRead(int pin)
 		for(i = 0; i < 4; i++)
 		  chan[i] += (mxlradcregs[(0x50+(i * 0x10))/4] & 0xffff);
 	}
+	return 0;
 }
 
 int main(int argc, char **argv)
@@ -81,5 +82,7 @@ int main(int argc, char **argv)
         printf("ADC0 = %d", analogRead(0));
         printf("ADC2 = %d", analogRead(2));
         printf("ADC0 in mA = %d", (meas_uA0/1000));
-	printf("ADC2 in mA = %d", (meas_uA2/1000))
+	printf("ADC2 in mA = %d", (meas_uA2/1000));
+	
+	/* 1.1736608125[x] or (281678595/240000000)[x]*/
 }
