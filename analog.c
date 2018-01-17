@@ -11,11 +11,96 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <stdlib.h>
+#include <string.h>
+#include <sys/select.h>
+#include <getopt.h>
+
 volatile unsigned int *mxlradcregs;
 unsigned int i, x;
 unsigned long long chan[4] = {0,0,0,0};
 int devmem;
 
+int gpio_export(int gpio)
+{
+	int efd;
+	char buf[50];
+	int ret;
+	efd = open("/sys/class/gpio/export", O_WRONLY);
+
+	if(efd != -1) {
+		sprintf(buf, "%d", gpio); 
+		ret = write(efd, buf, strlen(buf));
+		if(ret < 0) {
+			perror("Export failed");
+			return -2;
+		}
+		close(efd);
+	} else {
+		// If we can't open the export file, we probably
+		// dont have any gpio permissions
+		return -1;
+	}
+	return 0;
+}
+
+int gpio_direction(int gpio, int dir)
+{
+	int ret = 0;
+	char buf[50];
+	sprintf(buf, "/sys/class/gpio/gpio%d/direction", gpio);
+	int gpiofd = open(buf, O_WRONLY);
+	if(gpiofd < 0) {
+		perror("Couldn't open IRQ file");
+		ret = -1;
+	}
+
+	if(dir == 1 && gpiofd){
+		if (3 != write(gpiofd, "out", 3)) {
+			perror("Couldn't set GPIO direction to out");
+			ret = -2;
+		}
+	}
+	else if(gpiofd) {
+		if(2 != write(gpiofd, "in", 2)) {
+			perror("Couldn't set GPIO directio to in");
+			ret = -3;
+		}
+	}
+
+	close(gpiofd);
+	return ret;
+}
+
+int gpio_write(int gpio, int val)
+{	
+	char buf[50];
+	int ret, gpiofd;
+	sprintf(buf, "/sys/class/gpio/gpio%d/value", gpio);
+	gpiofd = open(buf, O_RDWR);
+	if(gpiofd > 0) {
+		snprintf(buf, 2, "%d", val);
+		ret = write(gpiofd, buf, 2);
+		if(ret < 0) {
+			perror("failed to set gpio");
+			return 1;
+		}
+
+		close(gpiofd);
+		if(ret == 2) return 0;
+	}
+	return 1;
+}
+
+void gpio_unexport(int gpio)
+{
+	int gpiofd;
+	char buf[50];
+	gpiofd = open("/sys/class/gpio/unexport", O_WRONLY);
+	sprintf(buf, "%d", gpio);
+	write(gpiofd, buf, strlen(buf));
+	close(gpiofd);
+}
 
 void analogPinMode(int pin)
 {
