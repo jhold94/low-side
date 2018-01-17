@@ -164,10 +164,10 @@ int main(int argc, char **argv)
 	int meas_uA2=(((meas_mV2)*1000)/240);
 
 	//return meas_uA;
-        printf("ADC0 = %d", analogRead(0));
-        printf("ADC2 = %d", analogRead(2));
-        printf("ADC0 in mA = %d", (meas_uA0/1000));
-	printf("ADC2 in mA = %d", (meas_uA2/1000));
+        printf("ADC0 = %d\n", analogRead(0));
+        printf("ADC2 = %d\n", analogRead(2));
+        printf("ADC0 in mA = %d\n", (meas_uA0/1000));
+	printf("ADC2 in mA = %d\n", (meas_uA2/1000));
 	
 	/* 1.1736608125[x] or (281678595/240000000)[x]*/
 }
