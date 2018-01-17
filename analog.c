@@ -158,6 +158,14 @@ int main(int argc, char **argv)
 	
 	analog_init();
 	
+	for(x = 0; x < 10; x++) {
+		mxlradcregs[0x18/4] = 0x7f; //Clear interrupt ready
+		mxlradcregs[0x4/4] = 0x7f; //Schedule conversaion of chan 6:0
+		while(!((mxlradcregs[0x10/4] & 0x7f) == 0x7f)); //Wait
+		for(i = 0; i < 4; i++)
+		  chan[i] += (mxlradcregs[(0x50+(i * 0x10))/4] & 0xffff);
+	}
+	
         int meas_mV0=((((chan[0]/10)*45177)*6235)/100000000);
 	int meas_uA0=(((meas_mV0)*1000)/240);
 	int meas_mV2=((((chan[2]/10)*45177)*6235)/100000000);
@@ -171,3 +179,4 @@ int main(int argc, char **argv)
 	
 	/* 1.1736608125[x] or (281678595/240000000)[x]*/
 }
+
