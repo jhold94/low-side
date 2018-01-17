@@ -122,9 +122,6 @@ void analogPinMode(int pin)
 	}
 }
 
-analogPinMode(0);
-analogPinMode(2);
-
 void analog_init(void)
 {
 	devmem = open("/dev/mem", O_RDWR|O_SYNC);
@@ -140,8 +137,6 @@ void analog_init(void)
 	for(x = 0; x < 4; x++)
 	  mxlradcregs[(0x50+(x * 0x10))/4] = 0x0; //Clear LRADCx reg
 }
-	
-analog_init();
 
 int analogRead(int pin)
 {
@@ -157,10 +152,10 @@ int analogRead(int pin)
 
 int main(int argc, char **argv)
 {
-	//analogPinMode(0);
-	//analogPinMode(2);
+	analogPinMode(0);
+	analogPinMode(2);
 	
-	//analog_init();
+	analog_init();
 	
 	for(x = 0; x < 10; x++) {
 		mxlradcregs[0x18/4] = 0x7f; //Clear interrupt ready
