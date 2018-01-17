@@ -22,7 +22,7 @@ unsigned long long chan[4] = {0,0,0,0};
 int devmem;
 
 devmem = open("/dev/mem", O_RDWR|O_SYNC);
-	assert(devmem != -1);
+assert(devmem != -1);
 
 // LRADC
 mxlradcregs = (unsigned int *) mmap(0, getpagesize(),
