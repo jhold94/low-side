@@ -21,20 +21,6 @@ unsigned int i, x;
 unsigned long long chan[4] = {0,0,0,0};
 int devmem;
 
-devmem = open("/dev/mem", O_RDWR|O_SYNC);
-assert(devmem != -1);
-
-// LRADC
-mxlradcregs = (unsigned int *) mmap(0, getpagesize(),
-  PROT_READ | PROT_WRITE, MAP_SHARED, devmem, 0x80050000);
-
-mxlradcregs[0x148/4] = 0xfffffff; //Clear LRADC6:0 assignments
-mxlradcregs[0x144/4] = 0x6543210; //Set LRDAC6:0 to channel 6:0
-mxlradcregs[0x28/4] = 0xff000000; //Set 1.8v range
-for(x = 0; x < 4; x++) {
-  mxlradcregs[(0x50+(x * 0x10))/4] = 0x0; //Clear LRADCx reg
-}
-
 int gpio_export(int gpio)
 {
 	int efd;
@@ -155,7 +141,8 @@ void analog_init(void)
 	  mxlradcregs[(0x50+(x * 0x10))/4] = 0x0; //Clear LRADCx reg
 }
 	
-	
+analog_init();
+
 int analogRead(int pin)
 {
 	for(x = 0; x < 10; x++) {
